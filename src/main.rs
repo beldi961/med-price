@@ -1,20 +1,34 @@
 use std::io::{self, BufRead};
+use std::env;
 
-fn get_price() -> String {
-    let mut line = String::new();
-    let stdin = io::stdin();
-    println!("Please input a total price:");
-    match stdin.lock().read_line(&mut line) {
-        Err(error) => panic!("A problem ocurred with your input! {:?}", error),
-        Ok(..) => return line,
+fn get_price(args: Vec<String>) -> f64 {
+    match args.len() < 2 {
+        true => {
+            let mut line = String::new();
+            let stdin = io::stdin();
+            println!("Please input a total price:");
+            match stdin.lock().read_line(&mut line) {
+                Err(error) => panic!("A problem ocurred with your input! {:?}", error),
+                Ok(..) => {
+                    match line.trim().parse() {
+                        Err(error) => panic!("You did not input a valid price! {:?}", error),
+                        Ok(float) => return float,
+                    };
+                },
+            };
+        },
+        false => {
+            match args[1].trim().parse() {
+                Err(error) => panic!("You did not input a valid price! {:?}", error),
+                Ok(float) => return float,
+            };
+        },
     };
 }
 
 fn main() {
-    let price: f64 = match get_price().trim().parse() {
-        Err(error) => panic!("You did not input a valid price! {:?}", error),
-        Ok(float) => float,
-    };
+    let args: Vec<String> = env::args().collect();
+    let price: f64 = get_price(args);
     let mwst = price - price / 1.19;
     let aep = (price - mwst - 0.2 - 0.21 - 8.35) / 1.03;
     let apo = price - mwst - 0.2 - 0.21 - aep;
