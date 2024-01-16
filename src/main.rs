@@ -15,6 +15,15 @@ fn main() {
         Err(error) => panic!("You did not input a valid price! {:?}", error),
         Ok(float) => float,
     };
-    println!("Total price: {:>8.2}€", price)
-    // print components
+    let mwst = price - price / 1.19;
+    let aep = (price - mwst - 0.2 - 0.21 - 8.35) / 1.03;
+    let apo = price - mwst - 0.2 - 0.21 - aep;
+    let apu = (aep - 0.73) / 1.0315;
+    let gh = aep - apu;
+    println!(
+        "Total price: {price:>8.2}€\n\
+        State Tax:   {mwst:>8.2}€\n\
+        Pharmacy:    {apo:>8.2}€\n\
+        Supplier:    {gh:>8.2}€\n\
+        Producer:    {apu:>8.2}€");
 }
