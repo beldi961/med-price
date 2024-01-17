@@ -1,29 +1,29 @@
 use std::io::{self, BufRead};
 use std::env;
 
-fn get_price(args: Vec<String>) -> f64 {
-    match args.len() < 2 {
-        true => {
-            let mut line = String::new();
-            let stdin = io::stdin();
-            println!("Please input a total price:");
-            match stdin.lock().read_line(&mut line) {
-                Err(error) => panic!("A problem ocurred with your input! {:?}", error),
-                Ok(..) => {
-                    match line.trim().parse() {
-                        Err(error) => panic!("You did not input a valid price! {:?}", error),
-                        Ok(float) => return float,
-                    };
-                },
-            };
-        },
-        false => {
-            match args[1].trim().parse() {
+fn read_price() -> f64 {
+    let mut line = String::new();
+    let stdin = io::stdin();
+    println!("Please input a total price:");
+    match stdin.lock().read_line(&mut line) {
+        Err(error) => panic!("A problem ocurred with your input! {:?}", error),
+        Ok(..) => {
+            match line.trim().parse() {
                 Err(error) => panic!("You did not input a valid price! {:?}", error),
                 Ok(float) => return float,
             };
         },
     };
+}
+
+fn get_price(args: Vec<String>) -> f64 {
+    if args.len() > 1 {
+        match args[1].trim().parse() {
+            Err(error) => panic!("You did not input a valid price! {:?}", error),
+            Ok(float) => return float,
+        }
+    }
+    return read_price();
 }
 
 fn main() {
