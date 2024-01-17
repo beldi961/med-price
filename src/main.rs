@@ -1,7 +1,7 @@
 use std::io::{self, BufRead};
 use std::env;
 
-fn read_price() -> f64 {
+fn read_float() -> f64 {
     let mut line = String::new();
     let stdin = io::stdin();
     println!("Please input a total price:");
@@ -23,7 +23,7 @@ fn get_price(args: Vec<String>) -> f64 {
             Ok(float) => return float,
         }
     }
-    return read_price();
+    return read_float();
 }
 
 fn main() {
