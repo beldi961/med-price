@@ -31,9 +31,14 @@ struct Arzneimittel {
 }
 
 impl Arzneimittel {
-    pub fn new(total_price: f64) -> Self {
+    pub fn from_total(total_price: f64) -> Self {
         Self {
             total_price,
+        }
+    }
+    pub fn from_buying_price(price: f64) -> Self {
+        Self {
+            total_price: (price * 1.03 + 8.35 + 0.21 + 0.2) * 1.19,
         }
     }
     pub fn tax(&self) -> f64 {
@@ -55,14 +60,16 @@ impl Arzneimittel {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let am = Arzneimittel::new(check_price(&args));
-    if args.contains(&String::from("-p")) {
-        println!("{:.2}", am.pharmacy_profit());
+    let am = if args.contains(&String::from("-t")) {
+        Arzneimittel::from_total(check_price(&args))
+    } else if args.contains(&String::from("-b")) {
+        Arzneimittel::from_buying_price(check_price(&args))
     } else {
+        Arzneimittel::from_total(check_price(&args))
+    };
     println!("Total price: {:>8.2}€", am.total_price);
     println!("State Tax:   {:>8.2}€", am.tax());
     println!("Pharmacy:    {:>8.2}€", am.pharmacy_profit());
     println!("Supplier:    {:>8.2}€", am.supplier_profit());
     println!("Producer:    {:>8.2}€", am.producer_price());
-    }
 }
