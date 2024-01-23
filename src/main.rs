@@ -22,19 +22,14 @@ struct Arzneimittel {
     total_price: f64,
 }
 
-enum PriceType {
-    Total(f64),
-    Buying(f64),
-}
-
 impl Arzneimittel {
-    fn from(price: PriceType) -> Self {
-        match price {
-            PriceType::Total(f) => Self {
-                total_price: f,
+    fn from(input_type: InputType, price: f64) -> Self {
+        match input_type {
+            InputType::Total => Self {
+                total_price: price,
             },
-            PriceType::Buying(f) => Self {
-                total_price: (f * 1.03 + 8.35 + 0.21 + 0.2) * 1.19,
+            InputType::Buying => Self {
+                total_price: (price * 1.03 + 8.35 + 0.21 + 0.2) * 1.19,
             },
         }
     }
@@ -57,12 +52,7 @@ impl Arzneimittel {
 
 fn main() {
     let args = Cli::parse();
-    // dbg!(args.input_type);
-    let price = match args.input_type {
-        InputType::Total => PriceType::Total(args.price),
-        InputType::Buying => PriceType::Buying(args.price),
-    };
-    let am = Arzneimittel::from(price);
+    let am = Arzneimittel::from(args.input_type, args.price);
     println!("Total price: {:>8.2}€", am.total_price);
     println!("State Tax:   {:>8.2}€", am.tax());
     println!("Pharmacy:    {:>8.2}€", am.pharmacy_profit());
