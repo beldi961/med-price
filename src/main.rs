@@ -79,16 +79,16 @@ fn main() {
             println!("Producer:    {:>8.2}€", am.producer_price());
         },
         OutputType::Pharmacy => {
-            println!("{:.2}€", am.pharmacy_profit());
+            println!("{:.2}", am.pharmacy_profit());
         },
         OutputType::Supplier => {
-            println!("{:.2}€", am.supplier_profit());
+            println!("{:.2}", am.supplier_profit());
         },
         OutputType::Tax => {
-            println!("{:.2}€", am.tax());
+            println!("{:.2}", am.tax());
         },
         OutputType::Producer => {
-            println!("{:.2}€", am.producer_price());
+            println!("{:.2}", am.producer_price());
         },
     }
 }
