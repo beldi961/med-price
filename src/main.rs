@@ -1,21 +1,21 @@
 use clap::Parser;
 
-#[derive(Debug, clap::Args)]
-#[group(required = true, multiple = false)]
-struct InputType {
+#[derive(Debug, Clone, clap::ValueEnum, Default)]
+enum InputType {
     /// total price of the pharmaceutical
-    #[clap(short = 't', long = "total-price")]
-    total: Option<f64>,
+    #[default]
+    Total,
     /// total price of the pharmaceutical
-    #[clap(short = 'b', long = "buying-price")]
-    buying: Option<f64>,
+    Buying,
 }
 
 #[derive(Parser, Debug)]
 #[clap(about, version, author)]
 struct Cli {
-    #[clap(flatten)]
-    price: InputType,
+    #[clap(short = 'i', long, default_value_t, value_enum)]
+    input_type: InputType,
+    #[clap(value_name = "PRICE")]
+    price: f64,
 }
 
 struct Arzneimittel {
@@ -57,10 +57,10 @@ impl Arzneimittel {
 
 fn main() {
     let args = Cli::parse();
-    let price = match (args.price.total, args.price.buying) {
-        (Some(f), _) => PriceType::Total(f),
-        (_, Some(f)) => PriceType::Buying(f),
-        (None, None) => panic!("no price provided"),
+    // dbg!(args.input_type);
+    let price = match args.input_type {
+        InputType::Total => PriceType::Total(args.price),
+        InputType::Buying => PriceType::Buying(args.price),
     };
     let am = Arzneimittel::from(price);
     println!("Total price: {:>8.2}€", am.total_price);
