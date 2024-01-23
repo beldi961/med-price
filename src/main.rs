@@ -5,8 +5,23 @@ enum InputType {
     /// total price of the pharmaceutical
     #[default]
     Total,
-    /// total price of the pharmaceutical
+    /// buying price of the pharmaceutical
     Buying,
+}
+
+#[derive(Debug, Clone, clap::ValueEnum, Default)]
+enum OutputType {
+    /// full price composition
+    #[default]
+    Full,
+    /// part of the price going to the pharmacy
+    Pharmacy,
+    /// part of the price going to the supplier
+    Supplier,
+    /// part of the price going to the state as VAT
+    Tax,
+    /// part of the price going to the producer
+    Producer,
 }
 
 #[derive(Parser, Debug)]
@@ -14,6 +29,8 @@ enum InputType {
 struct Cli {
     #[clap(short = 'i', long, default_value_t, value_enum)]
     input_type: InputType,
+    #[clap(short = 'o', long, default_value_t, value_enum)]
+    output_type: OutputType,
     #[clap(value_name = "PRICE")]
     price: f64,
 }
@@ -53,9 +70,25 @@ impl Arzneimittel {
 fn main() {
     let args = Cli::parse();
     let am = Arzneimittel::from(args.input_type, args.price);
-    println!("Total price: {:>8.2}€", am.total_price);
-    println!("State Tax:   {:>8.2}€", am.tax());
-    println!("Pharmacy:    {:>8.2}€", am.pharmacy_profit());
-    println!("Supplier:    {:>8.2}€", am.supplier_profit());
-    println!("Producer:    {:>8.2}€", am.producer_price());
+    match args.output_type {
+        OutputType::Full => {
+            println!("Total price: {:>8.2}€", am.total_price);
+            println!("State Tax:   {:>8.2}€", am.tax());
+            println!("Pharmacy:    {:>8.2}€", am.pharmacy_profit());
+            println!("Supplier:    {:>8.2}€", am.supplier_profit());
+            println!("Producer:    {:>8.2}€", am.producer_price());
+        },
+        OutputType::Pharmacy => {
+            println!("{:.2}€", am.pharmacy_profit());
+        },
+        OutputType::Supplier => {
+            println!("{:.2}€", am.supplier_profit());
+        },
+        OutputType::Tax => {
+            println!("{:.2}€", am.tax());
+        },
+        OutputType::Producer => {
+            println!("{:.2}€", am.producer_price());
+        },
+    }
 }
