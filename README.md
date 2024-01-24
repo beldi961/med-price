@@ -9,7 +9,3 @@ This is installable via rusts cargo build system, just clone the repository, cd 
 ```
 $ cargo install --path .
 ```
-
-## License
-
-This project is licensed under the GNU GPLv3.
