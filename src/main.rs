@@ -25,13 +25,13 @@ enum OutputType {
 }
 
 #[derive(Parser, Debug)]
-#[clap(about, version, author)]
+#[command(about, version, author)]
 struct Cli {
-    #[clap(short = 'i', long, default_value_t, value_enum)]
+    #[arg(short = 'i', long, default_value_t, value_enum)]
     input_type: InputType,
-    #[clap(short = 'o', long, default_value_t, value_enum)]
+    #[arg(short = 'o', long, default_value_t, value_enum)]
     output_type: OutputType,
-    #[clap(value_name = "PRICE")]
+    #[arg(value_name = "PRICE")]
     price: f64,
 }
 
