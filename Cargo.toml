@@ -2,6 +2,7 @@
 name = "med-price"
 version = "0.1.0"
 edition = "2021"
+author= "Lukas P. <info@peltner.xyz>"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
