@@ -4,7 +4,7 @@ med-price is a command line utility to calculate a list of price components of a
 
 ## Installation
 
-This is installable via rusts cargo build system, just clone the repository, cd into the root directory and run 
+This is installable via `cargo install`, just clone the repository, cd into the root directory and run 
 
 ```
 $ cargo install --path .
